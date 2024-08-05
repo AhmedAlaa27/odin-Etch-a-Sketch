@@ -1,13 +1,42 @@
 const container = document.querySelector(".container")
 
-for (let i = 1; i <= 256; i++) {
+function createGrid(rows = 16) {
 
-    let button = document.createElement("div")
-    button.classList.toggle("box")
+    // Clear existing grid
+    container.innerHTML = '';
 
-    button.addEventListener("mouseenter", () => {
-        button.style.backgroundColor = "black"
-    })
+    // Calculate square dimensions
+    const containerStyle = getComputedStyle(container);
+    const containerWidth = parseInt(containerStyle.getPropertyValue('width'));
+    const containerHeight = parseInt(containerStyle.getPropertyValue('height'));
+    const squareSize = containerWidth / rows;
 
-    container.appendChild(button)
+    // Create grid
+    for (let i = 0; i < rows * rows; i++) {
+
+        let box = document.createElement("div");
+        box.classList.add("box");
+        box.style.width = `${squareSize}px`;
+        box.style.height = `${squareSize}px`;
+        box.addEventListener("mouseenter", () => {
+            box.style.backgroundColor = "black";
+        });
+        container.appendChild(box);
+
+    }
 }
+
+
+let resizeButton = document.querySelector(".resize")
+
+resizeButton.addEventListener("click", () => {
+    let input = prompt("Enter a size (1-100)")
+    if (input > 100 || input < 1) {
+        alert("The number must be between (1-100)")
+        return;
+    }
+    createGrid(input)
+})
+
+// Initial grid creation
+createGrid()
